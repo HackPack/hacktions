@@ -1,6 +1,9 @@
 <?hh //strict
 namespace HackPack\Hacktions;
 
+use HackPack\Hacktions\Collection\ListenerCollection;
+use HackPack\Hacktions\Collection\TypedListenerCollection;
+
 trait Publisher
 {
     protected array<string, ListenerCollection> $listeners = [];
@@ -25,30 +28,5 @@ trait Publisher
     }
 }
 
-interface ListenerCollection 
-{
-    public function add<T>((function(T): void) $listener): ListenerCollection;
 
-    public function all<T>(): Vector<(function(T): void)>;
-}
 
-class TypedListenerCollection<T> implements ListenerCollection
-{
-    protected Vector<(function(T): void)> $listeners = Vector {};
-
-    public function __construct()
-    {
-
-    }
-
-    public function add((function(T): void) $listener): TypedListenerCollection<T>
-    {
-        $this->listeners->add($listener);
-        return $this;
-    }
-
-    public function all(): Vector<(function(T): void)>
-    {
-        return $this->listeners;
-    }
-}

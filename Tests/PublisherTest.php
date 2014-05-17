@@ -21,7 +21,3 @@ class PublisherTest extends TestCase
     }
 }
 
-class TestPublisher
-{
-    use Publisher;
-}

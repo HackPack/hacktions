@@ -26,6 +26,22 @@ class SubjectTest extends TestCase
         $this->expect($observer->getNotificationCount())->toEqual(1);
     }
 
+
+    public function test_notifyObservers_can_pass_variable_arguments(): void
+    {
+        $subject = new TestSubject();
+        $observer = new TestObserver();
+        $subject->registerObserver($observer);
+        $ints = Vector {};
+        $strs = Vector {};
+
+        $subject->notifyObservers($ints, $strs);
+
+        $this->expect($observer->getNotificationCount())->toEqual(1);
+        $this->expect($ints->at(0))->toEqual(1);
+        $this->expect($strs->at(0))->toEqual("test");
+    }
+
     public function test_removeObserver_removes_observer(): void
     {
         $subject = new TestSubject();

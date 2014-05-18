@@ -18,11 +18,13 @@ trait Subject<T>
         }
     }
 
-    public function notifyObservers(): void
+    public function notifyObservers(...): void
     {
         foreach ($this->observers as $observer) {
             invariant($observer instanceof Observer, 'Subjects can only notify Observers');
-            $observer->update($this);
+            $update = inst_meth($observer, 'update');
+            $args = array_merge([$this], func_get_args());
+            call_user_func_array($update, $args);
         }
     }
 

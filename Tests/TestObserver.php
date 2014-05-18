@@ -12,8 +12,15 @@ class TestObserver implements Observer<TestSubject>
         return $this->count;
     }
 
-    public function update(TestSubject $subject): void
+    public function update(TestSubject $subject, ...): void
     {
         $this->count++;
+        $args = array_slice(func_get_args(), 1);
+        if (count($args) > 1) {
+            $ints = $args[0];
+            $strs = $args[1];
+            $ints->add(1);
+            $strs->add("test");
+        }
     }
 }

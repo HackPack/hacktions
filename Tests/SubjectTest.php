@@ -6,7 +6,16 @@ use HackPack\Hacktions\Subject;
 
 class SubjectTest extends TestCase
 {
-    public function test_notify_notifies_observers(): void
+    public function test_registerObserver_registers_observer(): void
+    {
+        $subject = new TestSubject();
+        $observer = new TestObserver();
+        $subject->registerObserver($observer);
+
+        $this->expect($subject->getObservers()->count())->toEqual(1);
+    }
+
+    public function test_notifyObservers_notifies_observers(): void
     {
         $subject = new TestSubject();
         $observer = new TestObserver();
@@ -15,5 +24,15 @@ class SubjectTest extends TestCase
         $subject->notifyObservers();
 
         $this->expect($observer->getNotificationCount())->toEqual(1);
+    }
+
+    public function test_removeObserver_removes_observer(): void
+    {
+        $subject = new TestSubject();
+        $observer = new TestObserver();
+        $subject->registerObserver($observer);
+        $subject->removeObserver($observer);
+
+        $this->expect($subject->getObservers()->count())->toEqual(0);
     }
 }

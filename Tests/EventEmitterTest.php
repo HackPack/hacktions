@@ -41,4 +41,17 @@ class EventEmitterTest extends TestCase
 
         $this->expect($vector[0])->toEqual(1);
     }
+
+    public function test_trigger_should_pass_arguments_to_listener(): void
+    {
+        $emitter = new TestEventEmitter();
+        $vector = Vector {};
+        $emitter->on('test', function(...) {
+            func_get_args()[0]->add(1);
+        });
+
+        $emitter->trigger('test', $vector);
+
+        $this->expect($vector[0])->toEqual(1);
+    }
 }

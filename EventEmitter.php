@@ -22,11 +22,16 @@ trait EventEmitter
         }
     }
 
-    public function trigger(string $key): void
+    public function trigger(string $key, ...): void
     {
         $listeners = $this->getListenersByName($key);
         foreach ($listeners as $listener) {
-            $listener();
+            $callable = $listener;
+            $args = func_get_args();
+            if (count($args) > 1) {
+                $callable = () ==> call_user_func_array($listener, array_slice($args, 1));
+            }
+            $callable();
         }
     }
 

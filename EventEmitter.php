@@ -47,4 +47,20 @@ trait EventEmitter
         }
         throw new EventNotFoundException("Event with name $name not found");
     }
+
+    public function removeListeners(?string $event = null): void
+    {
+        if (!is_null($event) && array_key_exists($event, $this->listeners)) {
+            //no support for unset?
+            $copy = [];
+            foreach ($this->listeners as $key => $collection) {
+                if ($key != $event) {
+                    $copy[$key] = $collection;
+                }
+            }
+            $this->listeners = $copy;
+            return;
+        }
+        $this->listeners = [];
+    }
 }

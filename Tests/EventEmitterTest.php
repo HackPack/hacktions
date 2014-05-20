@@ -23,6 +23,27 @@ class EventEmitterTest extends TestCase
         $this->expect($emitter->getListeners()['test']->count())->toEqual(0);
     }
 
+    public function test_removeListeners_removes_all_listeners(): void
+    {
+        $emitter = new TestEventEmitter();
+        $emitter->on('test', (...) ==> {$x = 1;});
+        $emitter->removeListeners();
+
+        $this->expect(count($emitter->getListeners()))->toEqual(0);
+    }
+
+    public function test_removeListeners_can_remove_all_listeners_for_one_type(): void
+    {
+        $emitter = new TestEventEmitter();
+        $emitter->on('test', (...) ==> {$x = 1;});
+        $emitter->on('test2', (...) ==> {$x = 2;});
+        $emitter->removeListeners('test2');
+
+        $this
+            ->expectCallable(() ==> {$emitter->getListenersByName('test2');})
+            ->toThrow('HackPack\Hacktions\EventNotFoundException');
+    }
+
     public function test_off_throws_exception_if_key_does_not_exist(): void
     {
         $emitter = new TestEventEmitter();

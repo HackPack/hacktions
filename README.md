@@ -48,7 +48,7 @@ class Cook
 
     public function cook(Burger $burger): void
     {
-	$this->cookedBurgers->add($burger);
+        $this->cookedBurgers->add($burger);
         $this->notifyObservers();
     }
 

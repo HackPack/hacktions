@@ -23,6 +23,13 @@ class EventEmitterTest extends TestCase
         $this->expect($emitter->getListeners()['test']->count())->toEqual(0);
     }
 
+    public function test_off_throws_exception_if_key_does_not_exist(): void
+    {
+        $emitter = new TestEventEmitter();
+
+        $this->expectCallable(() ==> $emitter->off('nope', (...) ==> {}))->toThrow('HackPack\Hacktions\EventNotFoundException');
+    }
+
     public function test_trigger_should_cause_event_to_fire(): void
     {
         $emitter = new TestEventEmitter();

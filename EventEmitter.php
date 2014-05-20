@@ -15,7 +15,7 @@ trait EventEmitter
 
     public function off(string $key, (function(...): void) $listener): void
     {
-        $listeners = $this->listeners[$key];
+        $listeners = $this->getListenersByName($key);
         $index = $listeners->linearSearch($listener);
         if ($index > -1) {
             $listeners->removeKey($index);
@@ -24,7 +24,7 @@ trait EventEmitter
 
     public function trigger(string $key): void
     {
-        $listeners = $this->listeners[$key];
+        $listeners = $this->getListenersByName($key);
         foreach ($listeners as $listener) {
             $listener();
         }
@@ -33,5 +33,13 @@ trait EventEmitter
     public function getListeners(): array<string, Vector<(function(...): void)>>
     {
         return $this->listeners;
+    }
+
+    public function getListenersByName(string $name): Vector<(function(...): void)>
+    {
+        if (array_key_exists($name, $this->listeners)) {
+            return $this->listeners[$name];
+        }
+        throw new EventNotFoundException("Event with name $name not found");
     }
 }

@@ -3,6 +3,8 @@ namespace HackPack\Hacktions;
 
 trait Subject<T>
 {
+    use EventEmitter;
+
     protected Vector<T> $observers = Vector {};
 
     public function registerObserver(T $observer): void

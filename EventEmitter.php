@@ -3,22 +3,34 @@ namespace HackPack\Hacktions;
 
 trait EventEmitter
 {
-    protected Vector<(function(...): void)> $listeners = Vector {};
+    protected array<string, Vector<(function(...): void)>> $listeners = [];
 
     public function on(string $key, (function(...): void) $listener): void
     {
-        $this->listeners->add($listener);
+        if (! array_key_exists($key, $this->listeners)) {
+            $this->listeners[$key] = Vector {};
+        }
+        $this->listeners[$key]->add($listener);
     }
 
     public function off(string $key, (function(...): void) $listener): void
     {
-        $index = $this->listeners->linearSearch($listener);
+        $listeners = $this->listeners[$key];
+        $index = $listeners->linearSearch($listener);
         if ($index > -1) {
-            $this->listeners->removeKey($index);
+            $listeners->removeKey($index);
         }
     }
 
-    public function getListeners(): Vector<(function(...): void)>
+    public function trigger(string $key): void
+    {
+        $listeners = $this->listeners[$key];
+        foreach ($listeners as $listener) {
+            $listener();
+        }
+    }
+
+    public function getListeners(): array<string, Vector<(function(...): void)>>
     {
         return $this->listeners;
     }

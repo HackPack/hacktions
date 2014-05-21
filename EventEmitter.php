@@ -7,7 +7,7 @@ trait EventEmitter
 
     public function on(string $key, (function(...): void) $listener): void
     {
-        if (! array_key_exists($key, $this->listeners)) {
+        if (! $this->listeners->containsKey($key)) {
             $this->listeners[$key] = Vector {};
         }
         $this->listeners[$key]->add($listener);
@@ -42,7 +42,7 @@ trait EventEmitter
 
     public function getListenersByName(string $name): Vector<(function(...): void)>
     {
-        if (array_key_exists($name, $this->listeners)) {
+        if ($this->listeners->containsKey($name)) {
             return $this->listeners[$name];
         }
         throw new EventNotFoundException("Event with name $name not found");

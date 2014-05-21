@@ -24,7 +24,7 @@
         }
     },
     "require-dev": {
-        "hackpack/hackunit": "dev-master"
+        "hackpack/hackunit": "v0.2.0"
     },
     "config": {
         "bin-dir": "bin/"

@@ -45,7 +45,7 @@ trait EventEmitter
         if ($this->listeners->containsKey($name)) {
             return $this->listeners[$name];
         }
-        throw new EventNotFoundException("Event with name $name not found");
+        return Vector {};
     }
 
     public function removeListeners(?string $event = null): void

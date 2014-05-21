@@ -39,16 +39,7 @@ class EventEmitterTest extends TestCase
         $emitter->on('test2', (...) ==> {$x = 2;});
         $emitter->removeListeners('test2');
 
-        $this
-            ->expectCallable(() ==> {$emitter->getListenersByName('test2');})
-            ->toThrow('HackPack\Hacktions\EventNotFoundException');
-    }
-
-    public function test_off_throws_exception_if_key_does_not_exist(): void
-    {
-        $emitter = new TestEventEmitter();
-
-        $this->expectCallable(() ==> $emitter->off('nope', (...) ==> {}))->toThrow('HackPack\Hacktions\EventNotFoundException');
+        $this->expect($emitter->getListenersByName('test2')->count())->toEqual(0);
     }
 
     public function test_trigger_should_cause_event_to_fire(): void

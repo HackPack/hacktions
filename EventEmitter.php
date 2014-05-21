@@ -3,7 +3,7 @@ namespace HackPack\Hacktions;
 
 trait EventEmitter
 {
-    protected array<string, Vector<(function(...): void)>> $listeners = [];
+    protected Map<string, Vector<(function(...): void)>> $listeners = Map {};
 
     public function on(string $key, (function(...): void) $listener): void
     {
@@ -35,7 +35,7 @@ trait EventEmitter
         }
     }
 
-    public function getListeners(): array<string, Vector<(function(...): void)>>
+    public function getListeners(): Map<string, Vector<(function(...): void)>>
     {
         return $this->listeners;
     }
@@ -50,17 +50,9 @@ trait EventEmitter
 
     public function removeListeners(?string $event = null): void
     {
-        if (!is_null($event) && array_key_exists($event, $this->listeners)) {
-            //no support for unset?
-            $copy = [];
-            foreach ($this->listeners as $key => $collection) {
-                if ($key != $event) {
-                    $copy[$key] = $collection;
-                }
-            }
-            $this->listeners = $copy;
-            return;
+        if (!is_null($event) && $this->listeners->containsKey($event)) {
+            $this->listeners->removeKey($event);
         }
-        $this->listeners = [];
+        $this->listeners = Map {};
     }
 }
